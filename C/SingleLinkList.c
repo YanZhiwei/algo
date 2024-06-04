@@ -14,7 +14,7 @@ typedef struct Node
 Node* initList() {
     Node* L = (Node*)malloc(sizeof(Node));
     L->data = 0;
-    L->next = 0;
+    L->next = NULL;
     return L;
 }
 
