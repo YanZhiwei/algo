@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
 #define TRUE 1
 #define FALSE 0
 
@@ -9,13 +8,14 @@ typedef struct Node
 {
     int data;
     struct Node* next;
+
 } Node;
 
 Node* initList() {
-    Node* L = (Node*)malloc(sizeof(Node));
-    L->data = 0;
-    L->next = NULL;
-    return L;
+    Node* node = (Node*)malloc(sizeof(Node));
+    node->data = 0;
+    node->next = node;
+    return node;
 }
 
 void headInsert(Node* L, int data) {
@@ -28,23 +28,25 @@ void headInsert(Node* L, int data) {
 
 void tailInsert(Node* L, int data) {
     Node* lastNode = L;
-    for (int i = 0; i < L->data; i++)
+    while (lastNode->next != L)
     {
         lastNode = lastNode->next;
     }
     Node* node = (Node*)malloc(sizeof(Node));
     node->data = data;
-    node->next = NULL;
+    node->next = L;
     lastNode->next = node;
     L->data++;
 }
 
 int delete(Node* L, int data) {
-    Node* preNode = L;
     Node* node = L->next;
-    while (node)
+    Node* preNode = L;
+
+    while (node != L)
     {
         if (node->data == data) {
+
             preNode->next = node->next;
             free(node);
             L->data--;
@@ -54,20 +56,19 @@ int delete(Node* L, int data) {
         node = node->next;
     }
     return FALSE;
+
 }
 
 void printList(Node* L) {
     Node* node = L->next;
-    while (node)
+    while (node != L)
     {
-        printf("node=%d\n", node->data);
+        printf("%d\n", node->data);
         node = node->next;
     }
-
 }
 
 int main() {
-
     Node* L = initList();
     headInsert(L, 1);
     headInsert(L, 2);
@@ -76,14 +77,8 @@ int main() {
     headInsert(L, 5);
     tailInsert(L, 6);
     tailInsert(L, 7);
-    printList(L);
-
-    if (delete(L, 3)) {
-        printf("success delete\n");
-    }
-    else {
-        printf("fail delete\n");
-    }
+    delete(L, 6);
+    delete(L, 7);
     printList(L);
     return 0;
 }
